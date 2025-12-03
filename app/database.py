@@ -31,7 +31,10 @@ engine = create_engine(
     pool_size=5,
     max_overflow=0,
     pool_recycle=300,
-    echo=False  # Set True untuk debug
+    echo=False,
+    connect_args={
+        "sslmode": "require"
+    } if "supabase" in SQLALCHEMY_DATABASE_URL else {}
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

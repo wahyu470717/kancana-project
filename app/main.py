@@ -7,7 +7,6 @@ from app.config import settings
 # Create tables
 Base.metadata.create_all(bind=engine)
 
-
 app = FastAPI(
     title="Sistem Monitoring Infrastruktur Jalan",
     description="Dashboard untuk memonitoring kondisi infrastruktur jalan",
@@ -25,9 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include routers
 app.include_router(auth.router)
-
-
 
 
 @app.get("/api/")
@@ -53,6 +51,10 @@ def health_check():
         }
     }
 
+from mangum import Mangum
+handler = Mangum(app)
+
+# Local development server
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=settings.DEBUG)
